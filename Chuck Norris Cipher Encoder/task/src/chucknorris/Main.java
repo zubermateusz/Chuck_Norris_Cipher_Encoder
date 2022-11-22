@@ -1,5 +1,6 @@
 package chucknorris;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Scanner;
 
 public class Main {
@@ -14,12 +15,16 @@ public class Main {
             //wyswietlenie tekstu w formie binarnej STAGE 2/5
             //System.out.println(" ");
         // zakomentowany do stage 4/5
-        //tempText = changeTextToBinary(mainText); // przerabia tekst zwykly na binarny
+    //    tempText = changeTextToBinary(mainText); // przerabia tekst zwykly na binarny
         //System.out.println(tempText);
         // zakomentowany do stage 4/5
-        //tempText = encryptBinaryTextToZeros(tempText); // szyfruje tekst binarny na format 0 00 0000 00
+    //    tempText = encryptBinaryTextToZeros(tempText); // szyfruje tekst binarny na format 0 00 0000 00
 
         tempText = decodeEncodedText(mainText);
+
+        tempText = changeBinaryToText(tempText);
+
+        //tempText = encryptBinaryTextToZeros(tempText);
         printResult(tempText); // wyswietla tekst zaszyfrowany
 /*            // wstawienie spacji po kazdym znaku STAGE 1/5
             for (int i = 0; i < text.length(); i++) {
@@ -35,6 +40,16 @@ public class Main {
 
     }
 
+    private static StringBuilder changeBinaryToText(StringBuilder inputText) {
+        StringBuilder resultText = new StringBuilder(); // binary text
+
+        for (int i = 0; i < inputText.length() / 7; i++) {
+            resultText.append((char)Byte.parseByte(inputText.substring(i * 7, (i+1) * 7) , 2));
+        }
+
+        return resultText;
+    }
+
     private static StringBuilder decodeEncodedText(StringBuilder mainText) {
         StringBuilder resultText = new StringBuilder();
         int counter0 = 0;
@@ -42,49 +57,44 @@ public class Main {
         boolean flag0 = false;
         boolean flag1 = false;
         for (int i = 0; i < mainText.length(); i++) {
-            if (flag0 || flag1) {
-                if (flag0) { // znacznik dla 0 przy kolejnych '0'w linii podnosi licznik
-                    if (mainText.charAt(i) == '0') {
-                        counter0++;
-                    }
-                }
-                if (flag1) { // znacznik dla 1 przy kolejnych '1'w linii podnosi licznik
-                    if (mainText.charAt(i) == '0') {
-                        counter1++;
-                    }
-                }
-            } else {
-                if (mainText.charAt(i) == '0') { // znaleziono znak '0'
-                    if (mainText.charAt(i) == '0' && mainText.charAt(i + 1) == '0') { // znaleziono 00 rowne 0
-                        i += 2;
+            if (mainText.charAt(i) == '0') { // '0'
+                if (flag0) counter0++;
+                if (flag1) counter1++;
+                if (!flag0 && !flag1) {
+                    if (mainText.charAt(i + 1) == '0') { //znacznik '0'
                         flag0 = true;
+                        i++;
                     } else {
-                        if (mainText.charAt(i) == '0') { // znaleziono 0 rowne 1
-                            i++;
-                            flag1 = true;
-                        }
+                        flag1 = true;
                     }
-                } else { // znaleziono spacje
-                    if (counter0 > 0) {
-                        for (int j = 0; j < counter0; j++) {
-                            resultText.append("0");
-                        }
+                }
+            } else { // ' '
+                if (counter0 > 0) {
+                    for (int j = 0; j < counter0; j++) {
+                        resultText.append("0");
                     }
                     counter0 = 0;
-                    if (counter1 > 0) {
-                        for (int j = 0; j < counter1; j++) {
-                            resultText.append("1");
-                        }
+                    flag0 = false;
+                }
+                if (counter1 > 0) {
+                    for (int j = 0; j < counter1; j++) {
+                        resultText.append("1");
                     }
                     counter1 = 0;
                     flag1 = false;
-                    flag0 = false;
                 }
             }
         }
-
-
-
+        if (counter0 > 0) {
+            for (int j = 0; j < counter0; j++) {
+                resultText.append("0");
+            }
+        }
+        if (counter1 > 0) {
+            for (int j = 0; j < counter1; j++) {
+                resultText.append("1");
+            }
+        }
         return resultText;
     }
 

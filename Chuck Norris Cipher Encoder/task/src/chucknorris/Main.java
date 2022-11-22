@@ -6,10 +6,10 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
 
-        System.out.println("Input string:");
+
         // wczytanie tekstu od uzytkownika
-        StringBuilder mainText = new StringBuilder(new Scanner(System.in).nextLine());
-        StringBuilder tempText;
+        //StringBuilder mainText = new StringBuilder(new Scanner(System.in).nextLine());
+        StringBuilder tempText = new StringBuilder();
         // sprawdzenie czy cos zostalo wpisane
         //if (text.length() > 0) { //usuniete dla Stage 2/5
             //wyswietlenie tekstu w formie binarnej STAGE 2/5
@@ -19,13 +19,39 @@ public class Main {
         //System.out.println(tempText);
         // zakomentowany do stage 4/5
     //    tempText = encryptBinaryTextToZeros(tempText); // szyfruje tekst binarny na format 0 00 0000 00
-
-        tempText = decodeEncodedText(mainText);
-
-        tempText = changeBinaryToText(tempText);
-
+        for(;;) {
+            System.out.println("Please input operation (encode/decode/exit):");
+            String menuFromUser = new Scanner(System.in).nextLine();
+            switch (menuFromUser) {
+                case "encode": {
+                    System.out.println("Input string:");
+                    tempText = new StringBuilder(new Scanner(System.in).nextLine());
+                    tempText = changeTextToBinary(tempText);
+                    tempText = encryptBinaryTextToZeros(tempText);
+                    System.out.println("Encoded string:");
+                    printResult(tempText);
+                    break;
+                }
+                case "decode": {
+                    System.out.println("Input encoded string:");
+                    tempText = new StringBuilder(new Scanner(System.in).nextLine());
+                    tempText = decodeEncodedText(tempText);
+                    tempText = changeBinaryToText(tempText);
+                    System.out.println("Decoded string:");
+                    printResult(tempText);
+                    break;
+                }
+                case "exit": {
+                    System.out.println("Bye");
+                    System.exit(0);
+                }
+                default: {
+                    System.out.printf("There is no %s operation", menuFromUser);
+                }
+            }
+        }
         //tempText = encryptBinaryTextToZeros(tempText);
-        printResult(tempText); // wyswietla tekst zaszyfrowany
+         // wyswietla tekst zaszyfrowany
 /*            // wstawienie spacji po kazdym znaku STAGE 1/5
             for (int i = 0; i < text.length(); i++) {
                 textOutput.append(text.charAt(i)).append(' ');
@@ -37,7 +63,6 @@ public class Main {
 
  */
         //}
-
     }
 
     private static StringBuilder changeBinaryToText(StringBuilder inputText) {
@@ -170,9 +195,9 @@ public class Main {
     }
 
     private static void printResult(StringBuilder resultText) {
-        StringBuilder textOutput = new StringBuilder();
-        textOutput.append("The result:\n");
-        textOutput.append(resultText);
-        System.out.println(textOutput);
+        //StringBuilder textOutput = new StringBuilder();
+        //textOutput.append("The result:\n");
+        //textOutput.append(resultText);
+        System.out.println(resultText);
     }
 }

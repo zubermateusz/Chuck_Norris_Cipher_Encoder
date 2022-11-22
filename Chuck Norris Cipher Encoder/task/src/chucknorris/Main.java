@@ -1,6 +1,7 @@
 package chucknorris;
 
 import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class Main {
@@ -35,18 +36,51 @@ public class Main {
                 case "decode": {
                     System.out.println("Input encoded string:");
                     tempText = new StringBuilder(new Scanner(System.in).nextLine());
+                    if (tempText.charAt(0) != '0' || (tempText.charAt(0) != '0' && tempText.charAt(1) != '0')) {
+                        System.out.println("Encoded string is not valid.");
+                        System.out.println();
+                        break;
+                    }
+                    String[] array = tempText.toString().split(" ");
+                    if (array.length % 2 != 0) {
+                        System.out.println("Encoded string is not valid.");
+                        System.out.println();
+                        break;
+                    }
+                    boolean flag = true;
+                    for (String text : array) {
+                        for (int i = 0; i < text.length(); i++) {
+                            if (text.charAt(i) != '0') {
+                                System.out.println("Encoded string is not valid.");
+                                System.out.println();
+                                flag = false;
+                                break;
+                            }
+                        }
+                        if (!flag) {
+                            break;
+                        }
+                    }
+                    if (!flag) {
+                        break;
+                    }
                     tempText = decodeEncodedText(tempText);
+                    if (tempText.length() % 7 != 0) {
+                        System.out.println("Encoded string is not valid.");
+                        System.out.println();
+                        break;
+                    }
                     tempText = changeBinaryToText(tempText);
                     System.out.println("Decoded string:");
                     printResult(tempText);
                     break;
                 }
                 case "exit": {
-                    System.out.println("Bye");
+                    System.out.println("Bye!");
                     System.exit(0);
                 }
                 default: {
-                    System.out.printf("There is no %s operation", menuFromUser);
+                    System.out.println("There is no '" + menuFromUser + "' operation");
                 }
             }
         }
@@ -64,6 +98,7 @@ public class Main {
  */
         //}
     }
+
 
     private static StringBuilder changeBinaryToText(StringBuilder inputText) {
         StringBuilder resultText = new StringBuilder(); // binary text

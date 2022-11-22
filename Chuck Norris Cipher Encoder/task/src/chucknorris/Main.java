@@ -15,7 +15,7 @@ public class Main {
             //System.out.println(" ");
         tempText = changeTextToBinary(mainText); // przerabia tekst zwykly na binarny
         //System.out.println(tempText);
-        tempText = encryptBinaryTextWithZeros(tempText); // szyfruje tekst binarny na format 0 00 0000 00
+        tempText = encryptBinaryTextToZeros(tempText); // szyfruje tekst binarny na format 0 00 0000 00
 
         printResult(tempText); // wyswietla tekst zaszyfrowany
 /*            // wstawienie spacji po kazdym znaku STAGE 1/5
@@ -32,7 +32,7 @@ public class Main {
 
     }
 
-    private static StringBuilder encryptBinaryTextWithZeros(StringBuilder textToEncrypted) {
+    private static StringBuilder encryptBinaryTextToZeros(StringBuilder textToEncrypted) {
         StringBuilder encryptedText = new StringBuilder();
         boolean flag0 = false;
         boolean flag1 = false;
